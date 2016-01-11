@@ -1,9 +1,12 @@
 from django.shortcuts import render
+from .models import User
 
 
 def home(request):
+    '''Display user profile
+
+    Based on the task description, assume that the profile being displayed
+    is always for user 'admin'
     '''
-    from django.views.generic.base import TemplateView
-    url(r'^$', TemplateView.as_view(template_name='hello/index.html')),
-    '''
-    return render(request, 'hello/index.html')
+    profile = User.objects.get(username='admin')
+    return render(request, 'hello/index.html', {'profile': profile})
