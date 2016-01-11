@@ -128,3 +128,7 @@ TEMPLATE_DIRS = (
 
 # Turn off south during test
 SOUTH_TESTS_MIGRATE = False
+
+# Substituting a custom User model
+# https://docs.djangoproject.com/en/1.6/topics/auth/customizing/#substituting-a-custom-user-model
+AUTH_USER_MODEL = 'hello.User'
