@@ -1,14 +1,15 @@
-from django.test import TestCase, Client
+from django import test
 from django.http import HttpRequest
+from django.contrib.auth import get_user_model
 from .views import home
 
 
-class HomePageTests(TestCase):
+class HomePageTests(test.TestCase):
 
     def test_hardcoded_data(self):
         '''Checking presence of hardcoded data
         '''
-        client = Client()
+        client = test.Client()
         response = client.get('/')
         self.assertContains(response, '42 Coffee Cups Test Assignment')
 
@@ -18,3 +19,16 @@ class HomePageTests(TestCase):
         request = HttpRequest()
         response = home(request)
         self.assertContains(response, '42 Coffee Cups Test Assignment')
+
+
+class UserModelTests(test.TestCase):
+
+    def test_create_user(self):
+        '''Create user with additional profile fields
+        '''
+        User = get_user_model()
+        user = User.objects.create_user(
+            username='_test_user',
+            password='_test_pass',
+            birthday='2000-01-01')
+        self.assertIsInstance(user, User)
