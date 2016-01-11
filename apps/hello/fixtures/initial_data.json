@@ -1,0 +1,25 @@
+[
+{
+    "pk": 1, 
+    "model": "hello.user", 
+    "fields": {
+        "username": "admin", 
+        "bio": "Parchment then, is that your holy well,\r\nfrom which drink always slakes your thirst?\r\nYou'll never truly be refreshed until\r\nIt pours itself from your own soul, first.", 
+        "first_name": "Andrii", 
+        "last_name": "Ilika", 
+        "contact_jabber": "alphased@khavr.com", 
+        "is_active": true, 
+        "birthday": "1980-11-14", 
+        "is_superuser": true, 
+        "is_staff": true, 
+        "last_login": "2016-01-11T16:00:00Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "othercontacts": "Enough is enough", 
+        "password": "pbkdf2_sha256$12000$Xr850H1vTQ7I$/sQJwtMaoHwo3tikOBUeezPy17hh0DqjuQT3V+tOl3U=", 
+        "email": "alphasedout@gmail.com", 
+        "contact_skype": "ai22-uanic", 
+        "date_joined": "2016-01-11T12:34:56Z"
+    }
+}
+]
