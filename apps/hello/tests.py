@@ -23,12 +23,20 @@ class HomePageTests(test.TestCase):
 
 class UserModelTests(test.TestCase):
 
+    def setUp(self):
+        self.User = get_user_model()
+
     def test_create_user(self):
         '''Create user with additional profile fields
         '''
-        User = get_user_model()
-        user = User.objects.create_user(
+        user = self.User.objects.create_user(
             username='_test_user',
             password='_test_pass',
             birthday='2000-01-01')
-        self.assertIsInstance(user, User)
+        self.assertIsInstance(user, self.User)
+
+    def test_admin_user_present(self):
+        '''User named 'admin' exists on db creation
+        '''
+        user = self.User.objects.get(username='admin')
+        self.assertIsInstance(user, self.User)
