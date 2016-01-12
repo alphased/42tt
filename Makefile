@@ -1,8 +1,16 @@
 MANAGE=django-admin.py
 SETTINGS=fortytwo_test_task.settings
 
+# test:
+# 	PYTHONPATH=`pwd` DJANGO_SETTINGS_MODULE=$(SETTINGS) $(MANAGE) test
+# 	flake8 --exclude '*migrations*' apps fortytwo_test_task
+
 test:
 	PYTHONPATH=`pwd` DJANGO_SETTINGS_MODULE=$(SETTINGS) $(MANAGE) test
+	flake8 --exclude '*migrations*' apps fortytwo_test_task
+
+coverage:
+	PYTHONPATH=`pwd` DJANGO_SETTINGS_MODULE=$(SETTINGS) coverage run --source=apps --branch manage.py test
 	flake8 --exclude '*migrations*' apps fortytwo_test_task
 
 shell:
@@ -20,4 +28,4 @@ migrate:
 collectstatic:
 	PYTHONPATH=`pwd` DJANGO_SETTINGS_MODULE=$(SETTINGS) $(MANAGE) collectstatic --noinput
 
-.PHONY: test shell run syncdb migrate collectstatic
+.PHONY: test coverage shell run syncdb migrate collectstatic
