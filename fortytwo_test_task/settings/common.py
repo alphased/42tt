@@ -132,3 +132,36 @@ SOUTH_TESTS_MIGRATE = False
 # Substituting a custom User model
 # https://docs.djangoproject.com/en/1.6/topics/auth/customizing/#substituting-a-custom-user-model
 AUTH_USER_MODEL = 'hello.User'
+
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s'
+                      '%(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s:%(module)s: %(message)s'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+        },
+        'hello': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        }
+    },
+    'root': {'level': 'DEBUG'},
+}

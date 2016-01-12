@@ -1,24 +1,6 @@
 from django import test
-from django.http import HttpRequest
+from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
-from .views import home
-
-
-class HomePageTests(test.TestCase):
-
-    def test_hardcoded_data(self):
-        '''Checking presence of hardcoded data
-        '''
-        client = test.Client()
-        response = client.get('/')
-        self.assertContains(response, '42 Coffee Cups Test Assignment')
-
-    def test_homepage_view(self):
-        '''Checking presence of hardcoded data in the home view
-        '''
-        request = HttpRequest()
-        response = home(request)
-        self.assertContains(response, '42 Coffee Cups Test Assignment')
 
 
 class UserModelTests(test.TestCase):
@@ -40,3 +22,13 @@ class UserModelTests(test.TestCase):
         '''
         user = self.User.objects.get(username='admin')
         self.assertIsInstance(user, self.User)
+
+
+class HomePageTests(test.TestCase):
+
+    def test_hardcoded_data(self):
+        '''Checking presence of hardcoded data
+        '''
+        client = test.Client()
+        response = client.get(reverse('home'))
+        self.assertContains(response, 'Enough is enough')
