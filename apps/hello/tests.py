@@ -26,9 +26,26 @@ class UserModelTests(test.TestCase):
 
 class HomePageTests(test.TestCase):
 
+    def setUp(self):
+        self.client = test.Client()
+        self.User = get_user_model()
+
     def test_hardcoded_data(self):
         '''Checking presence of hardcoded data
         '''
-        client = test.Client()
-        response = client.get(reverse('home'))
+        response = self.client.get(reverse('home'))
+        self.assertContains(response, 'Enough is enough')
+
+    def test_no_user(self):
+        '''Page contains hard-coded data in case of no users in DB
+        '''
+        self.User.objects.all().delete()
+        response = self.client.get(reverse('home'))
+        self.assertContains(response, 'Enough is enough')
+
+    def test_more_than_one_user(self):
+        '''Page still contains 'admin' user data in case of more than one user in DB
+        '''
+        self.User.objects.create_user(username='adminna')
+        response = self.client.get(reverse('home'))
         self.assertContains(response, 'Enough is enough')
