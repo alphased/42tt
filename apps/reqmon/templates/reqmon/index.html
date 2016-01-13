@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% load tz  %}
+
+{% block title %}Requests - {% endblock title %}
+
+{% block content %}
+
+<div class="container">
+
+<nav class="navbar navbar-default">
+<div class="container-fluid">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="{% url 'home' %}">42 Coffee Cups Test Assignment</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="active"><a href="{% url 'requests' %}">Requests</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+        </ul>
+    </div>
+</div>
+</nav>
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>Latest request</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <ul id="requests" class="list-unstyled">
+            <li><p><span>Wed, 13 Jan 2016 20:43:25 +0000</span> <span>GET</span> <span>/</span></p></li>
+            <li><p><span>Wed, 13 Jan 2016 20:43:25 +0000</span> <span>GET</span> <span>/</span></p></li>
+            <li><p><span>Wed, 13 Jan 2016 20:43:25 +0000</span> <span>GET</span> <span>/</span></p></li>
+            <li><p><span>Wed, 13 Jan 2016 20:43:25 +0000</span> <span>GET</span> <span>/</span></p></li>
+            <li><p><span>Wed, 13 Jan 2016 20:43:25 +0000</span> <span>GET</span> <span>/</span></p></li>
+            <li><p><span>Wed, 13 Jan 2016 20:43:25 +0000</span> <span>GET</span> <span>/</span></p></li>
+            <li><p><span>Wed, 13 Jan 2016 20:43:25 +0000</span> <span>GET</span> <span>/</span></p></li>
+            <li><p><span>Wed, 13 Jan 2016 20:43:25 +0000</span> <span>GET</span> <span>/</span></p></li>
+            <li><p><span>Wed, 13 Jan 2016 20:43:25 +0000</span> <span>GET</span> <span>/</span></p></li>
+            <li><p><span>Wed, 13 Jan 2016 20:43:25 +0000</span> <span>GET</span> <span>/</span></p></li>
+        </ul>
+    </div>
+</div>
+<div class="clearfix"></div>
+</div>
+
+{% endblock content %}
