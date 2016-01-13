@@ -15,3 +15,9 @@ media
 static
 *.dat
 .env
+
+# coverage reports
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
