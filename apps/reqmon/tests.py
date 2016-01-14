@@ -1,6 +1,18 @@
 from django.test import Client, TestCase
 from django.core.urlresolvers import reverse
+from reqmon.models import Requests
 import beautifulsoupselect as bss
+
+
+class RequestsModelTests(TestCase):
+
+    def test_model_fields(self):
+        '''Model stores all required data (timestamp, path, method)
+        '''
+        user = Requests.objects.create(
+            method='GET',
+            path='/')
+        self.assertTrue(user.timestamp)
 
 
 class ResuestsPageTests(TestCase):
