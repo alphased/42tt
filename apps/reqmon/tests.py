@@ -15,6 +15,19 @@ class RequestsModelTests(TestCase):
         self.assertTrue(user.timestamp)
 
 
+class RequestsMiddlewareTests(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.link_requests = reverse('requests')
+
+    def test_middleware_got_requests(self):
+        '''Middleware stores requests which got a corresponding view
+        '''
+        self.client.get(self.link_requests)
+        self.assertEquals(self.link_requests, Requests.objects.get(pk=1).path)
+
+
 class ResuestsPageTests(TestCase):
 
     def setUp(self):
