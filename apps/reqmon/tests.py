@@ -41,3 +41,13 @@ class ResuestsPageTests(TestCase):
         response = self.client.get(self.link_requests)
         soup = bss.BeautifulSoupSelect(response.content)
         self.assertTrue(soup('a[href="%s"]' % self.link_home))
+
+    def test_amount_ordering(self):
+        '''View contains no more than last 10 requests and has the proper ordering
+        '''
+        for _ in range(10):
+            self.client.head(self.link_home)
+        response = self.client.get(self.link_requests)
+        soup = bss.BeautifulSoupSelect(response.content)
+        self.assertEquals(10, len(soup('ul#requests li')))
+        self.assertIn(self.link_requests, soup('ul#requests li')[0].text)
