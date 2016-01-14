@@ -51,3 +51,12 @@ class ResuestsPageTests(TestCase):
         soup = bss.BeautifulSoupSelect(response.content)
         self.assertEquals(10, len(soup('ul#requests li')))
         self.assertIn(self.link_requests, soup('ul#requests li')[0].text)
+
+    def test_form_contains(self):
+        '''view form contains latest request_id
+        '''
+        response = self.client.get(self.link_requests)
+        soup = bss.BeautifulSoupSelect(response.content)
+        self.assertEquals(
+            1,
+            int(soup('form#requests_form input[name=last]')[0]['value']))
