@@ -164,6 +164,10 @@ LOGGING = {
         'hello': {
             'handlers': ['console'],
             'level': 'DEBUG',
+        },
+        'reqmon': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
         }
     },
     'root': {'level': 'DEBUG'},
