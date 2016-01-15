@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 
 {% load staticfiles %}
+{% load l10n %}
 {% load tz %}
+
+{# {% get_current_timezone as TIME_ZONE %} #}
 
 {% block title %}Requests - {% endblock title %}
 
-{% block content %}
 
+{% block content %}<!-- block content -->
 <div class="container">
 
 <nav class="navbar navbar-default">
@@ -26,25 +29,68 @@
 </nav>
 
 <form id="requests_form">
-    <input type="text" name="last" value="{{ latest }}" />
-    <input type="text" name="new" value="0" />
+    <input type="text" hidden name="last" value="{{ latest }}" />
+    <input type="text" hidden name="new" value="0" />
 </form>
 
 <div class="row">
     <div class="col-md-12">
-        <h3>Latest request</h1>
+        <h3>Latest request ({{ TIME_ZONE }})</h1>
     </div>
 </div>
 <div class="row">
     <div class="col-md-12">
         <ul id="requests" class="list-unstyled">
         {% for item in requests %}
-            <li><p><span>{{ item.timestamp|localtime|date:'r' }}</span> <span>{{ item.method }}</span> <span>{{ item.path }}</span></p></li>
+            {# https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toUTCString #}
+            {# The most common return value is a RFC-1123 formatted date stamp, which is a slightly updated version of RFC-822 #} 
+            {# RFC 2822 used in Django #}
+            <li><p><span>{{ item.timestamp|date:'D, d M Y H:i:s T' }}</span> <span>{{ item.method }}</span> <span>{{ item.path }}</span></p></li>
         {% endfor %}
         </ul>
     </div>
 </div>
 <div class="clearfix"></div>
 </div>
+{% endblock content %}<!-- endblock content -->
 
-{% endblock content %}
+
+{% block extra_body %}<!-- block extra_body -->
+<script src="{% static 'js/ajax-init.js' %}"></script>
+<script type="text/javascript">
+$(function() {
+    var update = function() { 
+        $.ajax({
+            url: "{% url 'requests_updates' %}",
+            type: "GET",
+            dataType: "json",
+            data: { last : $('#requests_form input[name=last]').val()},
+            success: function(json) {
+                $('#requests_form input[name=last]').val(json.latest);
+                if (json.requests.length != 0) {
+                    counter = $('#requests_form input[name=new]')
+                    counter.val(function(index, value) {
+                        return parseInt(value) + json.requests.length;
+                    });
+                    var rest = document.title.match(/^(?:\(\d+\))(.*)$/);
+                    document.title = ["(", counter.val(), ") ",
+                                      (rest != null) ? rest[1] : document.title].join("");
+                    
+                    json.requests.forEach(function(element, index, array) {
+                        var timestamp = new Date(element.timestamp)
+                        $("#requests").prepend("<li><p><span>" + timestamp.toUTCString() + "</span> " +
+                                                      "<span>" + element.method + "</span> " +
+                                                      "<span>" + element.path + "</span></p></li>");
+                    });
+                }
+            },
+            error: function(xhr, errmsg, err) {},
+            complete: function(xhr, errmsg, err) {
+                window.setTimeout(update, 2500);
+            }
+        });
+    }
+    window.setTimeout(update, 2000);
+})
+</script>
+{% endblock extra_body %}<!-- endblock extra_body -->

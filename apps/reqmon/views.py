@@ -28,7 +28,9 @@ def updates(request):
         requests = Requests.objects.filter(pk__gt=last) \
                                    .order_by('id').reverse()
         latest = requests[0].id if requests else last
-        result = [str(r) for r in requests]
+        result = [{'timestamp': str(r.timestamp),
+                   'method': r.method, 'path': r.path}
+                  for r in requests]
         data = {'result': 'OK', 'latest': latest, 'requests': result}
         return render_to_json_response(data)
     else:
