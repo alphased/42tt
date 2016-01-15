@@ -21,47 +21,13 @@ class RequestsMiddlewareTests(TestCase):
     def setUp(self):
         self.client = Client()
         self.link_requests = reverse('requests')
+        self.link_requests_updates = reverse('requests_updates')
 
     def test_middleware_got_requests(self):
         '''Middleware stores requests which got a corresponding view
         '''
         self.client.get(self.link_requests)
         self.assertEquals(self.link_requests, Requests.objects.get(pk=1).path)
-
-
-class RequestsPageTests(TestCase):
-
-    def setUp(self):
-        self.client = Client()
-        self.link_home = reverse('home')
-        self.link_requests = reverse('requests')
-        self.link_requests_updates = reverse('requests_updates')
-
-    def test_home_link(self):
-        '''Page contains the link to the 'home' page
-        '''
-        response = self.client.get(self.link_requests)
-        soup = bss.BeautifulSoupSelect(response.content)
-        self.assertTrue(soup('a[href="%s"]' % self.link_home))
-
-    def test_amount_ordering(self):
-        '''View contains no more than last 10 requests and has the proper ordering
-        '''
-        for _ in range(10):
-            self.client.head(self.link_home)
-        response = self.client.get(self.link_requests)
-        soup = bss.BeautifulSoupSelect(response.content)
-        self.assertEquals(10, len(soup('ul#requests li')))
-        self.assertIn(self.link_requests, soup('ul#requests li')[0].text)
-
-    def test_form_contains(self):
-        '''view form contains latest request_id
-        '''
-        response = self.client.get(self.link_requests)
-        soup = bss.BeautifulSoupSelect(response.content)
-        self.assertEquals(
-            1,
-            int(soup('form#requests_form input[name=last]')[0]['value']))
 
     def test_ajax_request(self):
         '''Ajax endpoint returns results for zero, one and multiple requests
@@ -112,3 +78,37 @@ class RequestsPageTests(TestCase):
         self.assertEquals(200, response.status_code)
         self.assertEquals(7, len(result['requests']))
         self.assertEquals(7, result['latest'])
+
+
+class RequestsPageTests(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.link_home = reverse('home')
+        self.link_requests = reverse('requests')
+
+    def test_home_link(self):
+        '''Page contains the link to the 'home' page
+        '''
+        response = self.client.get(self.link_requests)
+        soup = bss.BeautifulSoupSelect(response.content)
+        self.assertTrue(soup('a[href="%s"]' % self.link_home))
+
+    def test_amount_ordering(self):
+        '''View contains no more than last 10 requests and has the proper ordering
+        '''
+        for _ in range(10):
+            self.client.head(self.link_home)
+        response = self.client.get(self.link_requests)
+        soup = bss.BeautifulSoupSelect(response.content)
+        self.assertEquals(10, len(soup('ul#requests li')))
+        self.assertIn(self.link_requests, soup('ul#requests li')[0].text)
+
+    def test_form_contains(self):
+        '''view form contains latest request_id
+        '''
+        response = self.client.get(self.link_requests)
+        soup = bss.BeautifulSoupSelect(response.content)
+        self.assertEquals(
+            1,
+            int(soup('form#requests_form input[name=last]')[0]['value']))
