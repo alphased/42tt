@@ -1,9 +1,11 @@
 from django.http import HttpResponse
+from django.views.decorators.http import require_GET
 from django.shortcuts import render
 from .models import Requests
 import logging
 import json
 import re
+import time
 
 
 logger = logging.getLogger(__name__)
@@ -21,13 +23,20 @@ def index(request):
                                                  'latest': requests[0].id})
 
 
+@require_GET
 def updates(request):
     last = request.GET.get('last', '0')
     last = int(last) if re.match('^\d+$', last) else None
     if request.is_ajax() and last is not None:
-        requests = Requests.objects.filter(pk__gt=last) \
-                                   .order_by('id').reverse()
-        latest = requests[0].id if requests else last
+        qs = Requests.objects.order_by('id')
+        filter_kwargs = {'pk__gt': last}
+        while True:
+            requests = qs.filter(**filter_kwargs)
+            if requests:
+                break
+            else:
+                time.sleep(.5)
+        latest = requests[len(requests)-1].id if requests else last
         result = [{'timestamp': str(r.timestamp),
                    'method': r.method, 'path': r.path}
                   for r in requests]
