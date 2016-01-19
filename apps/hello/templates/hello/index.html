@@ -5,27 +5,39 @@
 {% block content %}
 
 <div class="container">
-<div class="row">
-  <div class="col-md-12">
-	  <h1>42 Coffee Cups Test Assignment</h1>
-  </div>
+
+<nav class="navbar navbar-default">
+<div class="container-fluid">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="{% url 'home' %}">42 Coffee Cups Test Assignment</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'requests' %}">Requests</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+        </ul>
+    </div>
 </div>
+</nav>
+
 <div class="row">
-	<div class="col-md-6">
-		<p><span class="">First name: </span>{{ profile.first_name }}</p>
-		<p><span class="">Last name: </span>{{ profile.last_name }}</p>
-		<p><span class="">Birthday: </span>{{ profile.birthday }}</p>
-		<p><span class="">Bio: </span></p>
-		<p>{{ profile.bio|linebreaksbr }}</p>
-	</div>
-	<div class="col-md-6">
-		<p>Contacts</p>
-		<p><span class="">Email: </span>{{ profile.email }}</p>
-		<p><span class="">Jabber: </span>{{ profile.contact_jabber }}</p>
-		<p><span class="">Skype: </span>{{ profile.contact_skype }}</p>
-		<p><span class="">Other contacts: </span></p>
-		<p>{{ profile.othercontacts|linebreaksbr }}</p>
-	</div>
+    <div class="col-md-6">
+        <p><span class="">First name: </span>{{ profile.first_name }}</p>
+        <p><span class="">Last name: </span>{{ profile.last_name }}</p>
+        <p><span class="">Birthday: </span>{{ profile.birthday }}</p>
+        <p><span class="">Bio: </span></p>
+        <p>{{ profile.bio|linebreaksbr }}</p>
+    </div>
+    <div class="col-md-6">
+        <p>Contacts</p>
+        <p><span class="">Email: </span>{{ profile.email }}</p>
+        <p><span class="">Jabber: </span>{{ profile.contact_jabber }}</p>
+        <p><span class="">Skype: </span>{{ profile.contact_skype }}</p>
+        <p><span class="">Other contacts: </span></p>
+        <p>{{ profile.othercontacts|linebreaksbr }}</p>
+    </div>
 </div>
 <div class="clearfix"></div>
 </div>

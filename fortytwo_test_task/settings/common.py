@@ -42,8 +42,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'south',
     'apps.hello',
+    'apps.reqmon',
+    'south',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -53,6 +54,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'apps.reqmon.middleware.RequestsMiddleware',
 )
 
 ROOT_URLCONF = 'fortytwo_test_task.urls'
@@ -159,6 +162,10 @@ LOGGING = {
             'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
         },
         'hello': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+        'reqmon': {
             'handlers': ['console'],
             'level': 'DEBUG',
         }

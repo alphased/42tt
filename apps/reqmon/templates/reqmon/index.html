@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+{% load l10n %}
+{% load tz %}
+
+{% block title %}Requests - {% endblock title %}
+
+
+{% block content %}<!-- block content -->
+<div class="container">
+
+<nav class="navbar navbar-default">
+<div class="container-fluid">
+    <div class="navbar-header">
+        <a class="navbar-brand" href="{% url 'home' %}">42 Coffee Cups Test Assignment</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav">
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li class="active"><a href="{% url 'requests' %}">Requests</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+        </ul>
+    </div>
+</div>
+</nav>
+
+<form id="requests_form">
+    <input type="text" hidden id="last" value="{{ latest }}" />
+    <input type="text" hidden id="new" value="0" />
+</form>
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>Latest request</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <ul id="requests" class="list-unstyled">
+        {% for item in requests %}
+            {# https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toUTCString #}
+            {# The most common return value is a RFC-1123 formatted date stamp, which is a slightly updated version of RFC-822 #} 
+            {# RFC 2822 used in Django #}
+            <li><p><span>{{ item.timestamp|date:'D, d M Y H:i:s T' }}</span> <span>{{ item.method }}</span> <span>{{ item.path }}</span></p></li>
+        {% endfor %}
+        </ul>
+    </div>
+</div>
+<div class="clearfix"></div>
+</div>
+{% endblock content %}<!-- endblock content -->
+
+
+{% block extra_body %}<!-- block extra_body -->
+<script src="{% static 'js/ajax-init.js' %}"></script>
+<script src="{% static 'js/reqmon-ready.js' %}"></script>
+{% endblock extra_body %}<!-- endblock extra_body -->

@@ -27,12 +27,11 @@ def home(request):
     Based on the task description, assume that the profile being displayed
     is always for user 'admin'
     '''
-    logger.debug('request user: %s' % request.user)
+    logger.debug('User: %s' % request.user)
     profile = User(**DEFAULT_USER_PROFILE)
     try:
         profile = User.objects.get(username='admin')
     except ObjectDoesNotExist as e:
         logger.warning(e)
-    logger.info('using profile: %s' % profile)
 
     return render(request, 'hello/index.html', {'profile': profile})
