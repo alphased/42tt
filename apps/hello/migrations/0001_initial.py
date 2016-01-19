@@ -8,15 +8,6 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Deleting model 'User'
-        db.delete_table(u'hello_user')
-
-        # Removing M2M table for field groups on 'User'
-        db.delete_table(db.shorten_name(u'hello_user_groups'))
-
-        # Removing M2M table for field user_permissions on 'User'
-        db.delete_table(db.shorten_name(u'hello_user_user_permissions'))
-
         # Adding model 'User'
         db.create_table(u'hello_user', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
