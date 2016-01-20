@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 import sys
+from django.core.urlresolvers import reverse_lazy
+
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(__file__))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -135,6 +137,10 @@ SOUTH_TESTS_MIGRATE = False
 # Substituting a custom User model
 # https://docs.djangoproject.com/en/1.6/topics/auth/customizing/#substituting-a-custom-user-model
 AUTH_USER_MODEL = 'hello.User'
+
+# Requests middleware settings
+SKIP_PATH = [reverse_lazy('requests_updates'), ]
+PRI1_PATH = [reverse_lazy('admin:index'), ]
 
 # Logging
 LOGGING = {

@@ -34,6 +34,29 @@
 <div class="row">
     <div class="col-md-12">
         <h3>Latest request</h3>
+
+        <form id="requests_form" class="form-inline" method="GET" action="{% url 'requests' %}">
+            <div class="input-group">
+                <label for="priority" class="input-group-addon">Request priority</label>
+                <select class="form-control" id="priority" name="priority">
+                    {% for val, desc in priorities.items %}
+                    <option value="{{ val }}" {% ifequal val priority %}selected{% endifequal %}>{{ desc }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="input-group">
+                <label for="reverse" class="input-group-addon">Request ordering</label>
+                <select class="form-control" id="reverse" name="reverse">
+                    {% for val, desc in ordering.items %}
+                    <option value="{{ val }}" {% ifequal val reverse %}selected{% endifequal %}>{{ desc }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input type="text" hidden id="last" value="{{ latest }}" />
+            <input type="text" hidden id="new" value="0" />
+        </form>
+
+        <br />
     </div>
 </div>
 <div class="row">
