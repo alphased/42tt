@@ -1,4 +1,12 @@
 $(function() {
+    xhrRequests = undefined;
+
+    var abort = function() {
+        if (typeof xhrRequests !== "undefined") {
+            xhrRequests.abort();
+        }
+    }
+
     var reload = function() {
         $('form#requests_form').submit();
     }
@@ -14,7 +22,7 @@ $(function() {
     }
 
     var update = function() { 
-        $.ajax({
+        xhrRequests = $.ajax({
             url: "/requests/updates",
             type: "GET",
             dataType: "json",
@@ -40,10 +48,14 @@ $(function() {
                                           "<span>" + element.method + "</span> " +
                                           "<span>" + element.path + "</span></p></li>";
                         if (reverse == 0) {
-                            $("#requests > li:first-child").remove();
+                            if ($('#requests > li').length >= 10) {
+                                $("#requests > li:first-child").remove();
+                            }
                             $("#requests").append(text);
                         } else {
-                            $("#requests > li:last-child").remove();
+                            if ($('#requests > li').length >= 10) {
+                                $("#requests > li:last-child").remove();
+                            }
                             $("#requests").prepend(text);
                         }
                     });
@@ -59,6 +71,7 @@ $(function() {
 
     $('form#requests_form #reverse').on("change", reload);
     $('form#requests_form #priority').on("change", reload);
-    $(document).on('click keydown touchstart', reset);
+    $(window).on('beforeunload', abort);
     $(window).on('focus', reset);
+    $(document).on('click keydown touchstart', reset);
 })

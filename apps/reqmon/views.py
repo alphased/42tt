@@ -43,7 +43,7 @@ def index(request):
 
     requests = Requests.objects.order_by('-id') \
                                .filter(priority__gte=priority)[:10]
-    latest = requests[0].id
+    latest = requests[0].id if requests else 0
     requests = sorted(requests,
                       key=operator.attrgetter('id'),
                       reverse=bool(reverse))
