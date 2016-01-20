@@ -1,8 +1,16 @@
 from django.test import Client, TestCase
+from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 from reqmon.models import Requests
 import beautifulsoupselect as bss
 import json
+
+
+# Requests middleware test settings defaults
+requests_middleware_defaults = {
+    'SKIP_PATH': [reverse('requests_updates'), ],
+    'PRI1_PATH': [reverse('admin:index'), ],
+}
 
 
 class RequestsModelTests(TestCase):
@@ -28,12 +36,14 @@ class RequestsMiddlewareTests(TestCase):
         self.client.get(self.link_requests)
         self.assertEquals(self.link_requests, Requests.objects.get(pk=1).path)
 
+    @override_settings(**requests_middleware_defaults)
     def test_middleware_priority0_home(self):
         '''Middleware set priority 0 for request to home
         '''
         self.client.get(self.link_home)
         self.assertEquals(0, Requests.objects.get(pk=1).priority)
 
+    @override_settings(**requests_middleware_defaults)
     def test_middleware_priority1_admin(self):
         '''Middleware set priority 1 for request to admin
         '''

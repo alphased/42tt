@@ -1,9 +1,10 @@
 from reqmon.models import Requests
-from django.core.urlresolvers import reverse
+from django.conf import settings
 
 
-SKIP_PATH = [reverse('requests_updates'), ]
-PRI1_PATH = [reverse('admin:index'), ]
+# Need for speed
+SKIP_PATH = [str(url) for url in settings.SKIP_PATH]
+PRI1_PATH = [str(url) for url in settings.PRI1_PATH]
 
 
 class RequestsMiddleware():
