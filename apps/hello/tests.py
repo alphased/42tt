@@ -3,7 +3,10 @@ from django.core import management
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.contrib.contenttypes.models import ContentType
 from django.template import Template, Context
+from .models import Event, ADDITION, CHANGE, DELETION
+
 import beautifulsoupselect as bss
 from StringIO import StringIO
 
@@ -81,6 +84,8 @@ class EditLinkTagTests(TestCase):
         self.assertTrue(soup('a[href="%s"]' % self.link_admin_user))
 
     def test_edit_link_auth_group(self):
+        '''Link to auth group
+        '''
         group = Group.objects.create(name='linkme')
         context = Context({'object': group})
         rendered = self.template.render(context)
@@ -104,3 +109,59 @@ class EnumModelCommandTests(TestCase):
         self.assertIn(outstr, self.stdout.getvalue())
         self.assertIn(errstr, self.stderr.getvalue())
 
+
+class SignalRecieverTests(TestCase):
+
+    def setUp(self):
+        User = get_user_model()
+        self.instance = User.objects.create_user(username='beep_unique_user')
+        content_type_id = ContentType.objects.get_for_model(self.instance).pk
+        object_id = self.instance.pk
+        self.filter = {'content_type_id__exact': content_type_id,
+                       'object_id__exact': object_id}
+
+    def test_model_created(self):
+        '''Object already created, find it
+        '''
+        self.filter.update({'action_flag__exact': ADDITION})
+        self.assertEquals(1, Event.objects.filter(**self.filter).count())
+
+    def test_model_changed(self):
+        '''Found one, lets chenge it
+        '''
+        self.instance.save()
+        self.filter.update({'action_flag__exact': CHANGE})
+        self.assertEquals(1, Event.objects.filter(**self.filter).count())
+
+    def test_model_deleted(self):
+        '''I'm done trash it
+        '''
+        self.instance.delete()
+        self.filter.update({'action_flag__exact': DELETION})
+        self.assertEquals(1, Event.objects.filter(**self.filter).count())
+
+
+class NoSignalTests(TestCase):
+
+    def setUp(self):
+        content_type_id = ContentType.objects.get_for_model(Event).pk
+        self.instance = Event.objects.log_event(
+            content_type_id=content_type_id,
+            object_id='', object_repr='', action_flag=0)
+        object_id = self.instance.pk
+        self.filter = {'content_type_id__exact': content_type_id,
+                       'object_id__exact': object_id}
+
+    def test_signal_lost(self):
+        '''And silence was an answer
+        '''
+        self.filter.update({'action_flag__exact': ADDITION})
+        self.assertEquals(0, Event.objects.filter(**self.filter).count())
+
+        self.instance.save()
+        self.filter.update({'action_flag__exact': CHANGE})
+        self.assertEquals(0, Event.objects.filter(**self.filter).count())
+
+        self.instance.delete()
+        self.filter.update({'action_flag__exact': DELETION})
+        self.assertEquals(0, Event.objects.filter(**self.filter).count())
