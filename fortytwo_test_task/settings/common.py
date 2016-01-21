@@ -44,8 +44,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'apps.hello',
-    'apps.reqmon',
+    'hello',
+    'reqmon',
     'south',
 )
 
@@ -57,7 +57,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
-    'apps.reqmon.middleware.RequestsMiddleware',
+    'reqmon.middleware.RequestsMiddleware',
 )
 
 ROOT_URLCONF = 'fortytwo_test_task.urls'
