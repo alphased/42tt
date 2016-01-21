@@ -1,9 +1,11 @@
 from django.test import Client, TestCase
+from django.core import management
 from django.core.urlresolvers import reverse
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.template import Template, Context
 import beautifulsoupselect as bss
+from StringIO import StringIO
 
 
 class UserModelTests(TestCase):
@@ -83,4 +85,22 @@ class EditLinkTagTests(TestCase):
         context = Context({'object': group})
         rendered = self.template.render(context)
         self.assertIn(self.link_auth_group, rendered)
+
+
+class EnumModelCommandTests(TestCase):
+
+    def setUp(self):
+        self.User = get_user_model()
+        self.stdout = StringIO()
+        self.stderr = StringIO()
+
+    def test_command(self):
+        '''Command output contains our user model and only initial user
+        '''
+        outstr = '%s.%s %d' % (self.User.__module__, self.User.__name__, 1)
+        errstr = 'error: %s' % outstr
+        management.call_command('enummodel',
+                                stdout=self.stdout, stderr=self.stderr)
+        self.assertIn(outstr, self.stdout.getvalue())
+        self.assertIn(errstr, self.stderr.getvalue())
 
