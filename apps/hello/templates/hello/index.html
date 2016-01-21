@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load edit_link %}
+
 {% block title %}Home - {% endblock title %}
 
 {% block content %}
@@ -17,6 +19,7 @@
             <li><a href="{% url 'requests' %}">Requests</a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
+            <li>{% edit_link profile %}</li>
         </ul>
     </div>
 </div>
